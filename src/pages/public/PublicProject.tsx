@@ -14,7 +14,6 @@ import {
   Circle,
   Clock3,
   Flag,
-  LoaderCircle,
   Users,
   CalendarDays,
   ListTodo,
@@ -23,16 +22,24 @@ import {
 
 import { db } from "../../services/firebase/config";
 import {
-  type PublicProject,
+  type PublicProject as PublicProjectData,
   type PublicProjectTask,
   type PublicProjectMember,
 } from "../../services/groups/publicProjectService";
 
 import "./PublicProject.css";
 
-type ProjectData = PublicProject & {
+// ==========================================
+// TYPES
+// ==========================================
+
+type ProjectData = PublicProjectData & {
   groupName?: string;
 };
+
+// ==========================================
+// HELPERS
+// ==========================================
 
 const formatDate = (
   value?: Timestamp | null
@@ -55,12 +62,16 @@ const formatDate = (
   }).format(date);
 };
 
-const getStatusLabel = (status: PublicProjectTask["status"]) => {
+const getStatusLabel = (
+  status: PublicProjectTask["status"]
+): string => {
   switch (status) {
     case "completed":
       return "Completed";
+
     case "in_progress":
       return "In Progress";
+
     default:
       return "To Do";
   }
@@ -68,25 +79,40 @@ const getStatusLabel = (status: PublicProjectTask["status"]) => {
 
 const getPriorityLabel = (
   priority: PublicProjectTask["priority"]
-) => {
+): string => {
   switch (priority) {
     case "high":
       return "High";
+
     case "medium":
       return "Medium";
+
     default:
       return "Low";
   }
 };
 
+// ==========================================
+// PUBLIC PROJECT PAGE
+// ==========================================
+
 function PublicProject() {
   const { shareId } = useParams<{ shareId: string }>();
+
+  // ==========================================
+  // STATE
+  // ==========================================
 
   const [project, setProject] = useState<ProjectData | null>(null);
   const [tasks, setTasks] = useState<PublicProjectTask[]>([]);
   const [members, setMembers] = useState<PublicProjectMember[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // ==========================================
+  // LOAD PUBLIC PROJECT
+  // ==========================================
 
   useEffect(() => {
     let active = true;
@@ -102,17 +128,27 @@ function PublicProject() {
         setLoading(true);
         setError("");
 
-        const projectRef = doc(db, "publicProjects", shareId);
+        const projectRef = doc(
+          db,
+          "publicProjects",
+          shareId
+        );
+
         const projectSnapshot = await getDoc(projectRef);
 
         if (!projectSnapshot.exists()) {
-          throw new Error("This public project could not be found.");
+          throw new Error(
+            "This public project could not be found."
+          );
         }
 
-        const projectData = projectSnapshot.data() as ProjectData;
+        const projectData =
+          projectSnapshot.data() as Omit<ProjectData, "id">;
 
         if (projectData.isPublic !== true) {
-          throw new Error("This project is no longer publicly available.");
+          throw new Error(
+            "This project is no longer publicly available."
+          );
         }
 
         const [taskSnapshot, memberSnapshot] = await Promise.all([
@@ -133,14 +169,17 @@ function PublicProject() {
         })) as PublicProjectMember[];
 
         setProject({
-          id: projectSnapshot.id,
           ...projectData,
+          id: projectSnapshot.id,
         });
 
         setTasks(taskData);
         setMembers(memberData);
       } catch (err) {
-        console.error("Failed to load public project:", err);
+        console.error(
+          "Failed to load public project:",
+          err
+        );
 
         if (active) {
           setError(
@@ -163,19 +202,32 @@ function PublicProject() {
     };
   }, [shareId]);
 
+  // ==========================================
+  // PROJECT STATISTICS
+  // ==========================================
+
   const completedTasks = useMemo(
-    () => tasks.filter((task) => task.status === "completed").length,
+    () =>
+      tasks.filter(
+        (task) => task.status === "completed"
+      ).length,
     [tasks]
   );
 
   const progress = useMemo(() => {
     if (tasks.length === 0) return 0;
 
-    return Math.round((completedTasks / tasks.length) * 100);
+    return Math.round(
+      (completedTasks / tasks.length) * 100
+    );
   }, [completedTasks, tasks.length]);
 
+  // ==========================================
+  // SORT TASKS
+  // ==========================================
+
   const sortedTasks = useMemo(() => {
-    const order = {
+    const order: Record<PublicProjectTask["status"], number> = {
       in_progress: 0,
       todo: 1,
       completed: 2,
@@ -186,67 +238,79 @@ function PublicProject() {
     );
   }, [tasks]);
 
- if (loading) {
-  return (
-    <main className="public-project-page">
-      <div className="public-project-container">
-        <header className="public-project-topbar">
-          <a href="/" className="public-brand">
-            chapri<span>.</span>
-          </a>
-          <div className="public-access-label">
-            <span className="public-access-dot" />
-            Loading workspace
-          </div>
-        </header>
+  // ==========================================
+  // LOADING STATE
+  // ==========================================
 
-        <article className="public-project-document skeleton-document">
-          <div className="skeleton-eyebrow skeleton" />
+  if (loading) {
+    return (
+      <main className="public-project-page">
+        <div className="public-project-container">
+          <header className="public-project-topbar">
+            <a href="/" className="public-brand">
+              chapri<span>.</span>
+            </a>
 
-          <section className="skeleton-heading">
-            <div className="skeleton skeleton-title" />
-            <div className="skeleton skeleton-line" />
-            <div className="skeleton skeleton-line short" />
-            <div className="skeleton-meta">
-              <div className="skeleton skeleton-meta-item" />
-              <div className="skeleton skeleton-meta-item" />
+            <div className="public-access-label">
+              <span className="public-access-dot" />
+              Loading workspace
             </div>
-          </section>
+          </header>
 
-          <section className="skeleton-progress">
-            <div className="skeleton skeleton-line short" />
-            <div className="skeleton skeleton-progress-bar" />
-            <div className="skeleton skeleton-line" />
-          </section>
+          <article className="public-project-document skeleton-document">
+            <div className="skeleton-eyebrow skeleton" />
 
-          <section className="skeleton-tasks">
-            <div className="skeleton skeleton-line short" />
-            {[1, 2, 3, 4].map((item) => (
-              <div className="skeleton-task" key={item}>
-                <div className="skeleton skeleton-circle" />
-                <div className="skeleton-task-content">
-                  <div className="skeleton skeleton-line" />
-                  <div className="skeleton skeleton-line short" />
-                </div>
+            <section className="skeleton-heading">
+              <div className="skeleton skeleton-title" />
+              <div className="skeleton skeleton-line" />
+              <div className="skeleton skeleton-line short" />
+
+              <div className="skeleton-meta">
+                <div className="skeleton skeleton-meta-item" />
+                <div className="skeleton skeleton-meta-item" />
               </div>
-            ))}
-          </section>
+            </section>
 
-          <section className="skeleton-members">
-            <div className="skeleton skeleton-line short" />
-            <div className="skeleton skeleton-member" />
-            <div className="skeleton skeleton-member" />
-          </section>
+            <section className="skeleton-progress">
+              <div className="skeleton skeleton-line short" />
+              <div className="skeleton skeleton-progress-bar" />
+              <div className="skeleton skeleton-line" />
+            </section>
 
-          <footer className="public-project-footer">
-            <span>chapri.</span>
-            <span>Preparing your project...</span>
-          </footer>
-        </article>
-      </div>
-    </main>
-  );
-}
+            <section className="skeleton-tasks">
+              <div className="skeleton skeleton-line short" />
+
+              {[1, 2, 3, 4].map((item) => (
+                <div className="skeleton-task" key={item}>
+                  <div className="skeleton skeleton-circle" />
+
+                  <div className="skeleton-task-content">
+                    <div className="skeleton skeleton-line" />
+                    <div className="skeleton skeleton-line short" />
+                  </div>
+                </div>
+              ))}
+            </section>
+
+            <section className="skeleton-members">
+              <div className="skeleton skeleton-line short" />
+              <div className="skeleton skeleton-member" />
+              <div className="skeleton skeleton-member" />
+            </section>
+
+            <footer className="public-project-footer">
+              <span>chapri.</span>
+              <span>Preparing your project...</span>
+            </footer>
+          </article>
+        </div>
+      </main>
+    );
+  }
+
+  // ==========================================
+  // ERROR STATE
+  // ==========================================
 
   if (error || !project) {
     return (
@@ -256,20 +320,29 @@ function PublicProject() {
         </div>
 
         <h1>Project unavailable</h1>
+
         <p>
-          {error || "This project link is invalid or no longer available."}
+          {error ||
+            "This project link is invalid or no longer available."}
         </p>
       </main>
     );
   }
 
+  // ==========================================
+  // MAIN PAGE
+  // ==========================================
+
   return (
     <main className="public-project-page">
       <div className="public-project-container">
+
+        {/* TOPBAR */}
+
         <header className="public-project-topbar">
           <a href="/" className="public-brand">
-  <span>Chapri</span>
-</a>
+            <span>Chapri</span>
+          </a>
 
           <div className="public-access-label">
             <span className="public-access-dot" />
@@ -278,57 +351,79 @@ function PublicProject() {
         </header>
 
         <article className="public-project-document">
+
+          {/* DOCUMENT HEADER */}
+
           <div className="document-eyebrow">
             <span>PROJECT WORKSPACE</span>
             <span className="eyebrow-divider">/</span>
             <span>PUBLIC OVERVIEW</span>
           </div>
 
+          {/* PROJECT INFORMATION */}
+
           <section className="document-heading">
             <h1>{project.name}</h1>
 
             <p className="document-description">
-              {project.description || "No project description provided."}
+              {project.description ||
+                "No project description provided."}
             </p>
 
             <div className="document-meta">
+
               <div className="document-meta-item">
                 <Users size={15} />
+
                 <span>
                   {members.length}{" "}
-                  {members.length === 1 ? "member" : "members"}
+                  {members.length === 1
+                    ? "member"
+                    : "members"}
                 </span>
               </div>
 
               <div className="document-meta-item">
                 <ListTodo size={15} />
+
                 <span>
                   {tasks.length}{" "}
-                  {tasks.length === 1 ? "task" : "tasks"}
+                  {tasks.length === 1
+                    ? "task"
+                    : "tasks"}
                 </span>
               </div>
 
               {project.updatedAt && (
                 <div className="document-meta-item">
                   <Clock3 size={15} />
+
                   <span>
                     Updated {formatDate(project.updatedAt)}
                   </span>
                 </div>
               )}
+
             </div>
           </section>
 
+          {/* PROJECT PROGRESS */}
+
           <section className="progress-section">
             <div className="section-heading-row">
+
               <div>
-                <span className="section-kicker">PROJECT STATUS</span>
+                <span className="section-kicker">
+                  PROJECT STATUS
+                </span>
+
                 <h2>Overall progress</h2>
               </div>
 
               <strong className="progress-percentage">
                 {progress}%
               </strong>
+
             </div>
 
             <div
@@ -341,7 +436,9 @@ function PublicProject() {
             >
               <div
                 className="progress-fill"
-                style={{ width: `${progress}%` }}
+                style={{
+                  width: `${progress}%`,
+                }}
               />
             </div>
 
@@ -349,45 +446,76 @@ function PublicProject() {
               <span>
                 <strong>{completedTasks}</strong> completed
               </span>
+
               <span>
-                <strong>{tasks.length - completedTasks}</strong> remaining
+                <strong>
+                  {tasks.length - completedTasks}
+                </strong>{" "}
+                remaining
               </span>
             </div>
           </section>
 
+          {/* PROJECT TASKS */}
+
           <section className="tasks-section">
             <div className="section-heading-row tasks-heading">
+
               <div>
-                <span className="section-kicker">WORK BREAKDOWN</span>
+                <span className="section-kicker">
+                  WORK BREAKDOWN
+                </span>
+
                 <h2>Project tasks</h2>
               </div>
 
               <span className="task-count-label">
                 {tasks.length} total
               </span>
+
             </div>
 
             {sortedTasks.length === 0 ? (
               <div className="empty-tasks">
                 <ListTodo size={25} />
+
                 <h3>No tasks yet</h3>
-                <p>Tasks added to this project will appear here.</p>
+
+                <p>
+                  Tasks added to this project will appear here.
+                </p>
               </div>
             ) : (
               <div className="public-task-list">
+
                 {sortedTasks.map((task) => (
-                  <article className="public-task-item" key={task.id}>
+                  <article
+                    className="public-task-item"
+                    key={task.id}
+                  >
                     <div className="task-status-icon">
+
                       {task.status === "completed" ? (
-                        <CheckCircle2 className="status-completed" size={21} />
+                        <CheckCircle2
+                          className="status-completed"
+                          size={21}
+                        />
                       ) : task.status === "in_progress" ? (
-                        <Clock3 className="status-progress" size={21} />
+                        <Clock3
+                          className="status-progress"
+                          size={21}
+                        />
                       ) : (
-                        <Circle className="status-todo" size={21} />
+                        <Circle
+                          className="status-todo"
+                          size={21}
+                        />
                       )}
+
                     </div>
 
                     <div className="public-task-content">
+
                       <div className="public-task-title-row">
                         <h3
                           className={
@@ -413,39 +541,54 @@ function PublicProject() {
                       )}
 
                       <div className="public-task-meta">
+
                         <span
                           className={`task-priority priority-${task.priority}`}
                         >
                           <Flag size={12} />
+
                           {getPriorityLabel(task.priority)}
                         </span>
 
                         {task.deadline && (
                           <span className="task-deadline">
                             <CalendarDays size={13} />
+
                             {formatDate(task.deadline)}
                           </span>
                         )}
+
                       </div>
                     </div>
                   </article>
                 ))}
+
               </div>
             )}
           </section>
 
+          {/* PROJECT MEMBERS */}
+
           {members.length > 0 && (
             <section className="members-section">
+
               <div className="section-heading-row">
                 <div>
-                  <span className="section-kicker">COLLABORATION</span>
+                  <span className="section-kicker">
+                    COLLABORATION
+                  </span>
+
                   <h2>Project members</h2>
                 </div>
               </div>
 
               <div className="public-member-list">
+
                 {members.map((member) => (
-                  <div className="public-member-item" key={member.id}>
+                  <div
+                    className="public-member-item"
+                    key={member.id}
+                  >
                     <div className="member-avatar">
                       {(member.displayName || "M")
                         .trim()
@@ -455,6 +598,7 @@ function PublicProject() {
 
                     <div className="member-information">
                       <strong>{member.displayName}</strong>
+
                       <span>
                         {member.role === "owner"
                           ? "Project Owner"
@@ -465,17 +609,22 @@ function PublicProject() {
                     </div>
                   </div>
                 ))}
+
               </div>
             </section>
           )}
 
+          {/* FOOTER */}
+
           <footer className="public-project-footer">
             <span>Shared via Chapri</span>
+
             <span className="footer-private-note">
               <ArrowUpRight size={13} />
               Read-only project overview
             </span>
           </footer>
+
         </article>
       </div>
     </main>

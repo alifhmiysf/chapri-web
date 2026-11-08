@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -6,7 +7,6 @@ import {
   UserPlus,
   Layers3,
   Sparkles,
-  LoaderCircle,
 } from "lucide-react";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -33,6 +33,10 @@ const Groups = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // ==========================================
+  // LOAD GROUPS
+  // ==========================================
+
   const loadGroups = useCallback(async () => {
     if (!user) return;
 
@@ -58,6 +62,10 @@ const Groups = () => {
     void loadGroups();
   }, [loadGroups]);
 
+  // ==========================================
+  // FORM HANDLERS
+  // ==========================================
+
   const openCreateForm = () => {
     setMode("create");
     setShowForm(true);
@@ -75,7 +83,11 @@ const Groups = () => {
     if (!user) return;
 
     if (mode === "create") {
-      await createGroup(user, value, description ?? "");
+      await createGroup(
+        user,
+        value,
+        description ?? ""
+      );
     } else {
       await joinGroup(user, value);
     }
@@ -84,9 +96,15 @@ const Groups = () => {
     await loadGroups();
   };
 
+  // ==========================================
+  // RENDER
+  // ==========================================
+
   return (
     <div className="groups-page gm-page">
+
       {/* PAGE HEADER */}
+
       <header className="gm-header">
         <div className="gm-header-content">
           <div className="gm-eyebrow">
@@ -128,6 +146,7 @@ const Groups = () => {
       </header>
 
       {/* ERROR */}
+
       {error && (
         <div className="gm-error">
           <span>{error}</span>
@@ -142,6 +161,7 @@ const Groups = () => {
       )}
 
       {/* GROUP OVERVIEW */}
+
       <section className="gm-overview">
         <div className="gm-overview-heading">
           <div className="gm-overview-icon">
@@ -160,6 +180,7 @@ const Groups = () => {
         {!loading && (
           <div className="gm-group-count">
             <strong>{groups.length}</strong>
+
             <span>
               {groups.length === 1 ? "group" : "groups"}
             </span>
@@ -168,10 +189,14 @@ const Groups = () => {
       </section>
 
       {/* LOADING STATE */}
+
       {loading ? (
         <div className="gm-loading-grid">
           {[1, 2, 3].map((item) => (
-            <div className="gm-skeleton-card" key={item}>
+            <div
+              className="gm-skeleton-card"
+              key={item}
+            >
               <div className="gm-skeleton-top">
                 <div className="gm-skeleton-icon" />
                 <div className="gm-skeleton-line" />
@@ -185,14 +210,19 @@ const Groups = () => {
           ))}
         </div>
       ) : groups.length === 0 ? (
+
         /* EMPTY STATE */
+
         <div className="gm-empty-state">
           <div className="gm-empty-illustration">
             <div className="gm-empty-circle circle-one" />
             <div className="gm-empty-circle circle-two" />
 
             <div className="gm-empty-main-icon">
-              <UsersRound size={34} strokeWidth={1.7} />
+              <UsersRound
+                size={34}
+                strokeWidth={1.7}
+              />
             </div>
 
             <div className="gm-empty-sparkle sparkle-one">
@@ -236,8 +266,11 @@ const Groups = () => {
             </button>
           </div>
         </div>
+
       ) : (
+
         /* GROUP LIST */
+
         <div className="gm-group-grid">
           {groups.map((group) => (
             <GroupCard
@@ -250,6 +283,7 @@ const Groups = () => {
       )}
 
       {/* GROUP FORM */}
+
       {showForm && (
         <GroupForm
           mode={mode}

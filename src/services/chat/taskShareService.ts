@@ -40,14 +40,17 @@ export interface SharedTaskPayload {
 // VALIDATION HELPERS
 // ==========================================
 
-const validateId = (
+function validateId(
   value: unknown,
   fieldName: string
-): asserts value is string => {
-  if (typeof value !== "string" || value.trim().length === 0) {
+): asserts value is string {
+  if (
+    typeof value !== "string" ||
+    value.trim().length === 0
+  ) {
     throw new Error(`${fieldName} is missing or invalid.`);
   }
-};
+}
 
 const validateTask = (task: SharedTaskPayload): void => {
   if (!task || typeof task !== "object") {

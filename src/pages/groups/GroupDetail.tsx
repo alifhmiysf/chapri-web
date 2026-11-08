@@ -334,19 +334,25 @@ const GroupDetail = () => {
   // MEMBER MANAGEMENT
 
   const handleChangeRole = async (
-    targetId: string,
-    role: GroupRole
-  ) => {
-    if (!id || !user) return;
+  targetId: string,
+  role: GroupRole
+) => {
+  if (!id || !user) return;
 
-    try {
-      await changeMemberRole(id, user.uid, targetId, role);
-      await loadGroup();
-    } catch (err) {
-      console.error("Change member role error:", err);
-      alert("Failed to change member role.");
-    }
-  };
+  // Owner tidak boleh diberikan melalui perubahan role anggota.
+  if (role === "owner") {
+    console.error("The owner role cannot be assigned.");
+    return;
+  }
+
+  try {
+    await changeMemberRole(id, user.uid, targetId, role);
+    await loadGroup();
+  } catch (err) {
+    console.error("Change member role error:", err);
+    alert("Failed to change member role.");
+  }
+};
 
   const handleRemoveMember = async (targetId: string) => {
     if (!id || !user) return;

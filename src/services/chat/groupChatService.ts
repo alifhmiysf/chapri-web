@@ -32,17 +32,18 @@ export interface GroupChatMessage {
 // HELPERS
 // ==========================================
 
-const validateId = (
+function validateId(
   value: unknown,
   fieldName: string
-): asserts value is string => {
+): asserts value is string {
   if (typeof value !== "string" || !value.trim()) {
     throw new Error(`${fieldName} is missing or invalid.`);
   }
-};
+}
 
 const getGroupChatId = (groupId: string): string => {
   validateId(groupId, "Group ID");
+
   return `group_${groupId}`;
 };
 
@@ -71,6 +72,7 @@ export const getOrCreateGroupChat = async (
 
   await runTransaction(db, async (transaction) => {
     // READ MEMBERSHIP AND CHAT
+
     const [memberSnapshot, chatSnapshot] = await Promise.all([
       transaction.get(memberRef),
       transaction.get(chatRef),
@@ -82,6 +84,7 @@ export const getOrCreateGroupChat = async (
 
     if (!chatSnapshot.exists()) {
       // CREATE GROUP CHAT
+
       transaction.set(chatRef, {
         type: "group",
         groupId,
@@ -191,6 +194,7 @@ export const sendGroupMessage = async (
 
   await runTransaction(db, async (transaction) => {
     // READ MEMBERSHIP AND CHAT
+
     const [memberSnapshot, chatSnapshot] = await Promise.all([
       transaction.get(memberRef),
       transaction.get(chatRef),
@@ -214,6 +218,7 @@ export const sendGroupMessage = async (
     }
 
     // WRITE MESSAGE
+
     transaction.set(messageRef, {
       senderId,
       type: "text",
@@ -222,6 +227,7 @@ export const sendGroupMessage = async (
     });
 
     // UPDATE CHAT METADATA
+
     transaction.update(chatRef, {
       lastMessage: text.slice(0, 120),
       lastMessageAt: serverTimestamp(),

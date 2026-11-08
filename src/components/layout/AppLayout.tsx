@@ -11,7 +11,6 @@ import {
   CheckSquare,
   Users,
   MessageCircle,
-  Settings,
   Menu,
   X,
   LogOut,
@@ -71,8 +70,13 @@ const AppLayout = () => {
   const currentPath = location.pathname;
 
   const getPageTitle = () => {
-    if (currentPath.startsWith("/groups/")) return "Group Workspace";
-    if (currentPath.startsWith("/chats/")) return "Private Conversation";
+    if (currentPath.startsWith("/groups/")) {
+      return "Group Workspace";
+    }
+
+    if (currentPath.startsWith("/chats/")) {
+      return "Private Conversation";
+    }
 
     return pageTitles[currentPath] || "Workspace";
   };
@@ -110,7 +114,10 @@ const AppLayout = () => {
   const renderNavigation = () => (
     <nav className="app-sidebar-navigation">
       {navigation.map((section) => (
-        <div key={section.label} className="app-nav-section">
+        <div
+          key={section.label}
+          className="app-nav-section"
+        >
           <p className="app-nav-section-label">
             {section.label}
           </p>
@@ -174,6 +181,8 @@ const AppLayout = () => {
           collapsed ? "is-collapsed" : ""
         } ${mobileMenuOpen ? "mobile-open" : ""}`}
       >
+        {/* SIDEBAR BRAND */}
+
         <div className="app-sidebar-brand">
           <button
             type="button"
@@ -187,9 +196,13 @@ const AppLayout = () => {
           <button
             type="button"
             className="app-sidebar-collapse"
-            onClick={() => setCollapsed((value) => !value)}
+            onClick={() =>
+              setCollapsed((value) => !value)
+            }
             aria-label={
-              collapsed ? "Expand sidebar" : "Collapse sidebar"
+              collapsed
+                ? "Expand sidebar"
+                : "Collapse sidebar"
             }
           >
             {collapsed ? (
@@ -209,7 +222,11 @@ const AppLayout = () => {
           </button>
         </div>
 
+        {/* NAVIGATION */}
+
         {renderNavigation()}
+
+        {/* SIDEBAR BOTTOM */}
 
         <div className="app-sidebar-bottom">
           <div className="app-user-card">
@@ -222,6 +239,7 @@ const AppLayout = () => {
                 <span className="app-user-name">
                   {user?.displayName || "User"}
                 </span>
+
                 <span className="app-user-email">
                   {user?.email || ""}
                 </span>
@@ -237,14 +255,19 @@ const AppLayout = () => {
             title={collapsed ? "Logout" : undefined}
           >
             <LogOut size={18} />
+
             {!collapsed && (
               <span>
-                {loggingOut ? "Logging out..." : "Log out"}
+                {loggingOut
+                  ? "Logging out..."
+                  : "Log out"}
               </span>
             )}
           </button>
         </div>
       </aside>
+
+      {/* MAIN CONTENT */}
 
       <div className="app-main">
         <header className="app-topbar">
