@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-
+import "../../styles/form-modal.css";
 interface Props {
   mode: "create" | "join";
   onSubmit: (value: string, description?: string) => Promise<void>;

@@ -1,0 +1,243 @@
+
+/* =========================================
+   CHAPRI - TASK & GROUP FORM MODAL
+========================================= */
+
+.task-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  animation: form-overlay-enter 0.18s ease-out;
+}
+
+.task-modal {
+  width: 100%;
+  max-width: 460px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 28px;
+
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 18px;
+
+  box-shadow:
+    0 24px 70px rgba(15, 23, 42, 0.18),
+    0 4px 12px rgba(15, 23, 42, 0.05);
+
+  animation: form-modal-enter 0.22s ease-out;
+}
+
+.task-modal h2 {
+  margin: 0 0 14px;
+
+  color: #172b4d;
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+  line-height: 1.35;
+}
+
+.task-modal label {
+  margin-top: 8px;
+
+  color: #344054;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.task-modal input,
+.task-modal textarea,
+.task-modal select {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  color: #172b4d;
+  background: #f8faff;
+
+  border: 1px solid #dce3ef;
+  border-radius: 10px;
+  outline: none;
+
+  font: inherit;
+  font-size: 14px;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.task-modal input::placeholder,
+.task-modal textarea::placeholder {
+  color: #98a2b3;
+}
+
+.task-modal input:focus,
+.task-modal textarea:focus,
+.task-modal select:focus {
+  background: #ffffff;
+  border-color: #4169e1;
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.12);
+}
+
+.task-modal textarea {
+  min-height: 105px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.task-modal select {
+  cursor: pointer;
+}
+
+.task-modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 18px;
+  padding-top: 18px;
+
+  border-top: 1px solid #edf0f5;
+}
+
+.task-modal .modal-actions button {
+  min-height: 40px;
+  padding: 0 17px;
+
+  border: 1px solid transparent;
+  border-radius: 9px;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.task-modal .modal-actions button:first-child {
+  color: #475467;
+  background: #ffffff;
+  border-color: #dce3ef;
+}
+
+.task-modal .modal-actions button:first-child:hover {
+  background: #f5f7fb;
+  border-color: #c8d1df;
+}
+
+.task-modal .modal-actions button:last-child {
+  color: #ffffff;
+  background: #3155c5;
+  border-color: #3155c5;
+
+  box-shadow: 0 3px 8px rgba(49, 85, 197, 0.18);
+}
+
+.task-modal .modal-actions button:last-child:hover:not(:disabled) {
+  background: #2647ad;
+  border-color: #2647ad;
+  box-shadow: 0 5px 12px rgba(49, 85, 197, 0.24);
+  transform: translateY(-1px);
+}
+
+.task-modal .modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.task-modal .error-message {
+  margin: 4px 0 0;
+  padding: 10px 12px;
+
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: 8px;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@keyframes form-overlay-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes form-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 600px) {
+  .task-modal-overlay {
+    align-items: center;
+    padding: 16px;
+  }
+
+  .task-modal {
+    max-height: calc(100dvh - 32px);
+    padding: 22px;
+    border-radius: 15px;
+  }
+
+  .task-modal h2 {
+    font-size: 19px;
+  }
+
+  .task-modal .modal-actions {
+    gap: 8px;
+  }
+
+  .task-modal .modal-actions button {
+    flex: 1;
+    padding: 0 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-modal-overlay,
+  .task-modal {
+    animation: none;
+  }
+}

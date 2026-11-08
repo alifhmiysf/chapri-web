@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import type { Task } from "../../services/tasks/taskService";
-
+import "../../styles/form-modal.css";
 interface Props {
   initialTask: Task | null;
   onSubmit: (

@@ -146,25 +146,25 @@ export const sendPrivateMessage = async (
     const chatData = chatSnapshot.data();
 
     if (
-      chatData.type !== "private" ||
-      !Array.isArray(chatData.participants) ||
-      !chatData.participants.includes(senderId)
+        chatData.type !== "private" ||
+        !Array.isArray(chatData.participants) ||
+        !chatData.participants.includes(senderId)
     ) {
-      throw new Error("You are not allowed to send messages here.");
+        throw new Error("You are not allowed to send messages here.");
     }
 
     transaction.set(messageRef, {
-      senderId,
-      text,
-      createdAt: serverTimestamp(),
+        senderId,
+        text,
+        createdAt: serverTimestamp(),
     });
 
     transaction.update(chatRef, {
-      lastMessage: text.slice(0, 120),
-      lastMessageAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+        lastMessage: text.slice(0, 120),
+        lastMessageAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
     });
-  });
+    });
 };
 
 // ==========================================
