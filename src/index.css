@@ -1,0 +1,116 @@
+```css
+@import "tailwindcss";
+
+/* =========================================
+   1. GLOBAL
+========================================= */
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #f5f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  --primary: #4169e1;
+  --primary-dark: #3155c5;
+  --primary-soft: #edf2ff;
+  --text-main: #172033;
+  --text-muted: #718096;
+  --border: #e8edf4;
+  --surface: #ffffff;
+  --background: #f5f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--background);
+  color: var(--text-main);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* =========================================
+   2. SHARED APPLICATION LAYOUT
+========================================= */
+
+.app-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text-main);
+}
+
+.app-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  padding: 26px 18px 18px;
+  background: #fff;
+  border-right: 1px solid var(--border);
+  transition: width 0.25s ease, transform 0.25s ease;
+}
+
+.app-sidebar.is-collapsed {
+  width: 82px;
+  padding-inline: 13px;
+}
+
+.app-sidebar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0 7px;
+  margin-bottom: 42px;
+}
+
+.app-brand {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #172b4d;
+  font-size: 29px;
+  font-weight: 850

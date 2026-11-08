@@ -1,0 +1,787 @@
+
+/* =========================================
+   CHAPRI - DASHBOARD
+   GLOWMORPHISM DESIGN
+========================================= */
+
+.chapri-dashboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  gap: 32px;
+  color: #172033;
+}
+
+/* =========================================
+   1. WELCOME SECTION
+   GLOWMORPHISM
+========================================= */
+
+.dashboard-welcome {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 255px;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 35px 42px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 19px;
+
+  background:
+    radial-gradient(
+      ellipse at 85% 15%,
+      rgba(125, 145, 255, 0.48),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 15% 100%,
+      rgba(99, 102, 241, 0.24),
+      transparent 45%
+    ),
+    linear-gradient(
+      125deg,
+      #172b4d 0%,
+      #263f78 48%,
+      #354c96 100%
+    );
+
+  color: #fff;
+
+  box-shadow:
+    0 15px 40px rgba(49, 85, 197, 0.18),
+    0 0 25px rgba(99, 125, 255, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.22);
+}
+
+/* Main glow */
+
+.dashboard-welcome::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -110px;
+  right: 12%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(140, 165, 255, 0.3);
+  filter: blur(75px);
+  pointer-events: none;
+}
+
+/* Secondary glow */
+
+.dashboard-welcome::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -140px;
+  left: 35%;
+  width: 280px;
+  height: 220px;
+  border-radius: 50%;
+  background: rgba(82, 112, 255, 0.22);
+  filter: blur(85px);
+  pointer-events: none;
+}
+
+/* Welcome content */
+
+.dashboard-welcome-content {
+  position: relative;
+  z-index: 2;
+  max-width: 590px;
+}
+
+.dashboard-welcome-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c3d0ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.dashboard-welcome-content h1 {
+  margin: 19px 0 12px;
+  color: #fff;
+  font-size: clamp(29px, 3.5vw, 42px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.15;
+  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-welcome-content h1 span {
+  color: #b7c8ff;
+}
+
+.dashboard-welcome-content > p {
+  max-width: 460px;
+  margin: 0;
+  color: #d1daf0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.dashboard-create-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 43px;
+  margin-top: 25px;
+  padding: 0 17px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #24447f;
+  font-size: 12px;
+  font-weight: 750;
+  transition: all 0.2s ease;
+  box-shadow: 0 5px 18px rgba(9, 23, 53, 0.12);
+}
+
+.dashboard-create-button:hover {
+  background: #edf2ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(9, 23, 53, 0.18);
+}
+
+/* =========================================
+   WELCOME DECORATION
+   GLASSMORPHISM
+========================================= */
+
+.dashboard-welcome-decoration {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 260px;
+  height: 195px;
+  margin-right: 15px;
+  isolation: isolate;
+}
+
+/* Main glass panel */
+
+.dashboard-welcome-decoration::before {
+  content: "";
+  position: absolute;
+  width: 175px;
+  height: 150px;
+  top: 20px;
+  right: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.17),
+    rgba(255, 255, 255, 0.035)
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    0 15px 35px rgba(7, 19, 45, 0.12);
+  transform: rotate(9deg);
+}
+
+/* Secondary glass panel */
+
+.dashboard-welcome-decoration::after {
+  content: "";
+  position: absolute;
+  width: 105px;
+  height: 105px;
+  bottom: 8px;
+  left: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    rgba(145, 170, 255, 0.23),
+    rgba(255, 255, 255, 0.045)
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transform: rotate(-12deg);
+}
+
+/* Remove old circles */
+
+.dashboard-decoration-circle {
+  display: none;
+}
+
+/* Main floating glass card */
+
+.dashboard-decoration-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 19px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.23),
+    rgba(255, 255, 255, 0.09)
+  );
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.32),
+    0 18px 40px rgba(5, 17, 42, 0.2);
+  transform: rotate(-5deg);
+}
+
+/* Glass card icon */
+
+.dashboard-decoration-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 13px;
+  background: rgba(145, 170, 255, 0.25);
+  color: #c1d0ff;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.dashboard-decoration-card > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dashboard-decoration-card strong {
+  color: #fff;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-decoration-card span {
+  color: rgba(230, 237, 255, 0.85);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+/* =========================================
+   2. SECTION INTRO
+========================================= */
+
+.dashboard-section-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 17px;
+}
+
+.dashboard-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #4169e1;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.dashboard-section-intro h2,
+.dashboard-tasks-header h2 {
+  margin: 0;
+  color: #172b4d;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+}
+
+.dashboard-overview-caption {
+  color: #929daf;
+  font-size: 11px;
+}
+
+/* =========================================
+   3. STATISTICS
+========================================= */
+
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.dashboard-stat-card {
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid #e8edf4;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(23, 32, 51, 0.025);
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-stat-card:hover {
+  border-color: #d1dcfa;
+  box-shadow: 0 8px 20px rgba(35, 58, 110, 0.055);
+  transform: translateY(-3px);
+}
+
+.dashboard-stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dashboard-stat-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border-radius: 11px;
+}
+
+.icon-total {
+  background: #edf2ff;
+  color: #4169e1;
+}
+
+.icon-todo {
+  background: #f0f3f8;
+  color: #718096;
+}
+
+.icon-progress {
+  background: #fff5e8;
+  color: #d18a35;
+}
+
+.icon-completed {
+  background: #eaf8f0;
+  color: #299967;
+}
+
+.dashboard-stat-label {
+  color: #9aa5b5;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-align: right;
+}
+
+.dashboard-stat-number {
+  display: block;
+  margin-top: 18px;
+  color: #172b4d;
+  font-size: 31px;
+  font-weight: 850;
+  letter-spacing: -1.3px;
+  line-height: 1;
+}
+
+.dashboard-stat-description {
+  display: block;
+  margin-top: 9px;
+  color: #929daf;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   4. PERSONAL TASKS
+========================================= */
+
+.dashboard-tasks-section {
+  min-width: 0;
+  padding: 25px;
+  border: 1px solid #e8edf4;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(23, 32, 51, 0.025);
+}
+
+.dashboard-tasks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 23px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.dashboard-tasks-header p {
+  margin: 7px 0 0;
+  color: #8490a3;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.dashboard-secondary-create {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 39px;
+  padding: 0 13px;
+  border: 1px solid #dfe6f5;
+  border-radius: 9px;
+  background: #fff;
+  color: #4169e1;
+  font-size: 11px;
+  font-weight: 750;
+  transition: all 0.2s ease;
+}
+
+.dashboard-secondary-create:hover {
+  border-color: #4169e1;
+  background: #f4f7ff;
+}
+
+/* Toolbar */
+
+.dashboard-task-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 0;
+}
+
+.dashboard-task-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #929daf;
+  font-size: 11px;
+}
+
+.dashboard-task-count span:first-child {
+  display: grid;
+  place-items: center;
+  min-width: 25px;
+  height: 25px;
+  padding: 0 6px;
+  border-radius: 7px;
+  background: #edf2ff;
+  color: #4169e1;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.dashboard-filter {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.dashboard-filter label {
+  color: #8490a3;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dashboard-filter select {
+  min-width: 135px;
+  min-height: 36px;
+  padding: 0 30px 0 11px;
+  border: 1px solid #e3e8f0;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #46546b;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.dashboard-filter select:focus {
+  border-color: #4169e1;
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.09);
+}
+
+/* Task grid */
+
+.dashboard-task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  min-width: 0;
+}
+
+/* =========================================
+   5. EMPTY STATE
+========================================= */
+
+.dashboard-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  padding: 35px 20px;
+  border: 1px dashed #dce3ee;
+  border-radius: 13px;
+  background: #fafbfe;
+  text-align: center;
+}
+
+.dashboard-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 17px;
+  border-radius: 17px;
+  background: #edf2ff;
+  color: #4169e1;
+}
+
+.dashboard-empty-state h3 {
+  margin: 0 0 8px;
+  color: #26354d;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.dashboard-empty-state p {
+  max-width: 350px;
+  margin: 0;
+  color: #8490a3;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.dashboard-empty-state .dashboard-create-button {
+  margin-top: 20px;
+  background: #4169e1;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(65, 105, 225, 0.15);
+}
+
+.dashboard-empty-state .dashboard-create-button:hover {
+  background: #3155c5;
+}
+
+.dashboard-reset-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 18px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #edf2ff;
+  color: #4169e1;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.dashboard-reset-filter:hover {
+  background: #e2eaff;
+}
+
+/* =========================================
+   6. ERROR
+========================================= */
+
+.dashboard-error {
+  margin-bottom: 15px;
+  padding: 12px 14px;
+  border: 1px solid #fecdd3;
+  border-radius: 9px;
+  background: #fff1f2;
+  color: #be3349;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   7. RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-welcome-decoration {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .chapri-dashboard {
+    gap: 25px;
+  }
+
+  .dashboard-welcome {
+    min-height: 230px;
+    padding: 30px;
+  }
+
+  .dashboard-welcome-decoration {
+    width: 180px;
+  }
+
+  .dashboard-task-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .chapri-dashboard {
+    gap: 23px;
+  }
+
+  .dashboard-welcome {
+    min-height: 220px;
+    padding: 26px 23px;
+  }
+
+  .dashboard-welcome-content {
+    max-width: 100%;
+  }
+
+  .dashboard-welcome-content h1 {
+    max-width: 390px;
+    font-size: 31px;
+    letter-spacing: -1.5px;
+  }
+
+  .dashboard-welcome-content > p {
+    max-width: 370px;
+    font-size: 11px;
+  }
+
+  .dashboard-welcome-decoration {
+    display: none;
+  }
+
+  .dashboard-welcome-label {
+    font-size: 9px;
+  }
+
+  .dashboard-section-intro {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .dashboard-overview-caption {
+    font-size: 10px;
+  }
+
+  .dashboard-stats-grid {
+    gap: 10px;
+  }
+
+  .dashboard-stat-card {
+    padding: 15px;
+  }
+
+  .dashboard-stat-number {
+    font-size: 27px;
+  }
+
+  .dashboard-stat-label {
+    font-size: 8px;
+  }
+
+  .dashboard-stat-description {
+    font-size: 9px;
+  }
+
+  .dashboard-tasks-section {
+    padding: 18px 15px;
+  }
+
+  .dashboard-tasks-header {
+    align-items: flex-start;
+  }
+
+  .dashboard-tasks-header h2 {
+    font-size: 18px;
+  }
+
+  .dashboard-secondary-create {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding-inline: 10px;
+    font-size: 10px;
+  }
+
+  .dashboard-task-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dashboard-filter {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .dashboard-filter select {
+    flex: 1;
+  }
+}
+
+@media (max-width: 380px) {
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-stat-card {
+    padding: 16px;
+  }
+
+  .dashboard-stat-top {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .dashboard-stat-label {
+    text-align: left;
+  }
+
+  .dashboard-stat-number {
+    margin-top: 13px;
+  }
+
+  .dashboard-tasks-header {
+    flex-direction: column;
+  }
+
+  .dashboard-secondary-create {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   8. ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-stat-card,
+  .dashboard-create-button,
+  .dashboard-secondary-create {
+    transition: none;
+  }
+}
