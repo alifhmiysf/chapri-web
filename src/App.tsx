@@ -24,12 +24,15 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route
+            path="/"
+            element={<Navigate to="/dashboard" replace />}
+          />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* PUBLIC PROJECT - NO LOGIN REQUIRED */}
+          {/* PUBLIC PROJECT */}
           <Route
             path="/public/projects/:shareId"
             element={<PublicProject />}
@@ -38,15 +41,29 @@ function App() {
           {/* PRIVATE APPLICATION */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route
+                path="/dashboard"
+                element={<Dashboard />}
+              />
+
               <Route path="/groups" element={<Groups />} />
-              <Route path="/groups/:id" element={<GroupDetail />} />
+              <Route
+                path="/groups/:id"
+                element={<GroupDetail />}
+              />
+
               <Route path="/chats" element={<PrivateChats />} />
-              <Route path="/chats/:chatId" element={<ChatRoom />} />
+              <Route
+                path="/chats/:chatId"
+                element={<ChatRoom />}
+              />
             </Route>
           </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route
+            path="*"
+            element={<Navigate to="/" replace />}
+          />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import {
   LayoutDashboard,
-  CheckSquare,
   Users,
   MessageCircle,
   Menu,
@@ -30,12 +29,6 @@ const navigation = [
         name: "Dashboard",
         path: "/dashboard",
         icon: LayoutDashboard,
-        end: true,
-      },
-      {
-        name: "My Tasks",
-        path: "/dashboard",
-        icon: CheckSquare,
         end: true,
       },
       {

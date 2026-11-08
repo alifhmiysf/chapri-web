@@ -39,11 +39,19 @@ const Dashboard = () => {
   const [filter, setFilter] = useState("all");
   const [error, setError] = useState("");
 
+  // =========================================
+  // SUBSCRIBE TASKS
+  // =========================================
+
   useEffect(() => {
     if (!user) return;
 
     return subscribeToTasks(user.uid, setTasks);
   }, [user]);
+
+  // =========================================
+  // TASK STATISTICS
+  // =========================================
 
   const stats = useMemo(
     () => ({
@@ -59,8 +67,12 @@ const Dashboard = () => {
     [tasks]
   );
 
-  const filteredTasks = tasks.filter(
-    (task) => filter === "all" || task.status === filter
+  const filteredTasks = useMemo(
+    () =>
+      tasks.filter(
+        (task) => filter === "all" || task.status === filter
+      ),
+    [tasks, filter]
   );
 
   const completionRate =
@@ -70,6 +82,10 @@ const Dashboard = () => {
 
   const firstName =
     user?.displayName?.trim().split(/\s+/)[0] || "there";
+
+  // =========================================
+  // SAVE TASK
+  // =========================================
 
   const handleSave = async (
     title: string,
@@ -88,7 +104,12 @@ const Dashboard = () => {
           priority,
         });
       } else {
-        await createTask(user.uid, title, description, priority);
+        await createTask(
+          user.uid,
+          title,
+          description,
+          priority
+        );
       }
 
       setShowForm(false);
@@ -98,8 +119,16 @@ const Dashboard = () => {
     }
   };
 
+  // =========================================
+  // DELETE TASK
+  // =========================================
+
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this task?")) {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this task?"
+      )
+    ) {
       return;
     }
 
@@ -110,6 +139,10 @@ const Dashboard = () => {
       setError("Failed to delete task.");
     }
   };
+
+  // =========================================
+  // UPDATE TASK STATUS
+  // =========================================
 
   const handleStatusChange = async (
     id: string,
@@ -123,7 +156,13 @@ const Dashboard = () => {
     }
   };
 
-  const getSharePayload = (task: Task): SharedTaskPayload => ({
+  // =========================================
+  // SHARE TASK PAYLOAD
+  // =========================================
+
+  const getSharePayload = (
+    task: Task
+  ): SharedTaskPayload => ({
     id: task.id,
     source: "personal",
     sourceGroupId: null,
@@ -134,14 +173,27 @@ const Dashboard = () => {
     deadline: null,
   });
 
+  // =========================================
+  // OPEN CREATE FORM
+  // =========================================
+
   const openCreateForm = () => {
+    setError("");
     setEditingTask(null);
     setShowForm(true);
   };
 
+  // =========================================
+  // RENDER
+  // =========================================
+
   return (
     <div className="chapri-dashboard">
-      {/* DASHBOARD INTRO */}
+
+      {/* =====================================
+          PAGE INTRO
+      ===================================== */}
+
       <section className="dashboard-welcome">
         <div className="dashboard-welcome-content">
           <div className="dashboard-welcome-label">
@@ -150,31 +202,24 @@ const Dashboard = () => {
           </div>
 
           <h1>
-            Good to see you, <span>{firstName}.</span>
+            Dashboard<span className="dashboard-title-dot">.</span>
           </h1>
 
           <p>
-            Keep your focus, organize your priorities, and make
-            progress one task at a time.
+            Good to see you, {firstName}. Organize your priorities
+            and make progress one task at a time.
           </p>
-
-          <button
-            type="button"
-            className="dashboard-create-button"
-            onClick={openCreateForm}
-          >
-            <Plus size={17} />
-            <span>Create new task</span>
-          </button>
         </div>
 
         <div className="dashboard-welcome-decoration">
           <div className="dashboard-decoration-circle dashboard-circle-one" />
           <div className="dashboard-decoration-circle dashboard-circle-two" />
+
           <div className="dashboard-decoration-card">
             <div className="dashboard-decoration-icon">
               <CheckCircle2 size={25} />
             </div>
+
             <div>
               <strong>{completionRate}%</strong>
               <span>Completion rate</span>
@@ -183,86 +228,135 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* STATISTICS */}
+      {/* =====================================
+          TASK OVERVIEW
+      ===================================== */}
+
       <section className="dashboard-overview">
         <div className="dashboard-section-intro">
           <div>
-            <span className="dashboard-eyebrow">AT A GLANCE</span>
-            <h2>Your overview</h2>
+            <span className="dashboard-eyebrow">
+              AT A GLANCE
+            </span>
+            <h2>Task overview</h2>
           </div>
 
           <span className="dashboard-overview-caption">
-            Personal task statistics
+            Your productivity at a glance
           </span>
         </div>
 
         <div className="dashboard-stats-grid">
+
+          {/* ALL TASKS */}
+
           <article className="dashboard-stat-card">
             <div className="dashboard-stat-top">
               <div className="dashboard-stat-icon icon-total">
                 <ListTodo size={19} />
               </div>
-              <span className="dashboard-stat-label">ALL TASKS</span>
+
+              <span className="dashboard-stat-label">
+                ALL TASKS
+              </span>
             </div>
-            <strong className="dashboard-stat-number">{stats.total}</strong>
+
+            <strong className="dashboard-stat-number">
+              {stats.total}
+            </strong>
+
             <span className="dashboard-stat-description">
               Tasks in your workspace
             </span>
           </article>
+
+          {/* TO DO */}
 
           <article className="dashboard-stat-card">
             <div className="dashboard-stat-top">
               <div className="dashboard-stat-icon icon-todo">
                 <Circle size={19} />
               </div>
-              <span className="dashboard-stat-label">TO DO</span>
+
+              <span className="dashboard-stat-label">
+                TO DO
+              </span>
             </div>
-            <strong className="dashboard-stat-number">{stats.todo}</strong>
+
+            <strong className="dashboard-stat-number">
+              {stats.todo}
+            </strong>
+
             <span className="dashboard-stat-description">
               Waiting to be started
             </span>
           </article>
+
+          {/* IN PROGRESS */}
 
           <article className="dashboard-stat-card">
             <div className="dashboard-stat-top">
               <div className="dashboard-stat-icon icon-progress">
                 <Clock3 size={19} />
               </div>
-              <span className="dashboard-stat-label">IN PROGRESS</span>
+
+              <span className="dashboard-stat-label">
+                IN PROGRESS
+              </span>
             </div>
+
             <strong className="dashboard-stat-number">
               {stats.progress}
             </strong>
+
             <span className="dashboard-stat-description">
               Currently being worked on
             </span>
           </article>
+
+          {/* COMPLETED */}
 
           <article className="dashboard-stat-card">
             <div className="dashboard-stat-top">
               <div className="dashboard-stat-icon icon-completed">
                 <CheckCircle2 size={19} />
               </div>
-              <span className="dashboard-stat-label">COMPLETED</span>
+
+              <span className="dashboard-stat-label">
+                COMPLETED
+              </span>
             </div>
+
             <strong className="dashboard-stat-number">
               {stats.completed}
             </strong>
+
             <span className="dashboard-stat-description">
               Successfully finished
             </span>
           </article>
+
         </div>
       </section>
 
-      {/* PERSONAL TASKS */}
-      <section className="dashboard-tasks-section" id="personal-tasks">
+      {/* =====================================
+          TASK LIST
+      ===================================== */}
+
+      <section
+        className="dashboard-tasks-section"
+        id="personal-tasks"
+      >
         <div className="dashboard-tasks-header">
           <div>
-            <span className="dashboard-eyebrow">STAY PRODUCTIVE</span>
-            <h2>Personal tasks</h2>
+            <span className="dashboard-eyebrow">
+              YOUR WORKSPACE
+            </span>
+
+            <h2>All tasks</h2>
+
             <p>
-              Manage your daily work and keep track of your progress.
+              Keep track of everything you need to get done.
             </p>
           </div>
 
@@ -276,34 +370,54 @@ const Dashboard = () => {
           </button>
         </div>
 
+        {/* TASK TOOLBAR */}
+
         <div className="dashboard-task-toolbar">
           <div className="dashboard-task-count">
             <span>{filteredTasks.length}</span>
+
             <span>
-              {filteredTasks.length === 1 ? "task" : "tasks"} displayed
+              {filteredTasks.length === 1
+                ? "task"
+                : "tasks"}{" "}
+              displayed
             </span>
           </div>
 
           <div className="dashboard-filter">
-            <label htmlFor="dashboard-task-filter">Filter:</label>
+            <label htmlFor="dashboard-task-filter">
+              Filter:
+            </label>
+
             <select
               id="dashboard-task-filter"
               value={filter}
-              onChange={(event) => setFilter(event.target.value)}
+              onChange={(event) =>
+                setFilter(event.target.value)
+              }
             >
               <option value="all">All tasks</option>
               <option value="todo">To do</option>
-              <option value="in_progress">In progress</option>
+              <option value="in_progress">
+                In progress
+              </option>
               <option value="completed">Completed</option>
             </select>
           </div>
         </div>
 
+        {/* ERROR MESSAGE */}
+
         {error && (
-          <div className="dashboard-error" role="alert">
+          <div
+            className="dashboard-error"
+            role="alert"
+          >
             {error}
           </div>
         )}
+
+        {/* EMPTY STATE OR TASK GRID */}
 
         {filteredTasks.length === 0 ? (
           <div className="dashboard-empty-state">
@@ -323,6 +437,8 @@ const Dashboard = () => {
                 : "There are no tasks matching this filter. Try selecting another status."}
             </p>
 
+            {/* CREATE FIRST TASK */}
+
             {tasks.length === 0 && (
               <button
                 type="button"
@@ -333,6 +449,8 @@ const Dashboard = () => {
                 Create your first task
               </button>
             )}
+
+            {/* RESET FILTER */}
 
             {tasks.length > 0 && filter !== "all" && (
               <button
@@ -352,6 +470,7 @@ const Dashboard = () => {
                 key={task.id}
                 task={task}
                 onEdit={(selectedTask) => {
+                  setError("");
                   setEditingTask(selectedTask);
                   setShowForm(true);
                 }}
@@ -364,7 +483,10 @@ const Dashboard = () => {
         )}
       </section>
 
-      {/* TASK FORM */}
+      {/* =====================================
+          TASK FORM
+      ===================================== */}
+
       {showForm && (
         <TaskForm
           initialTask={editingTask}
@@ -376,7 +498,10 @@ const Dashboard = () => {
         />
       )}
 
-      {/* SHARE TASK */}
+      {/* =====================================
+          SHARE TASK MODAL
+      ===================================== */}
+
       {sharingTask && user && (
         <ShareTaskModal
           task={getSharePayload(sharingTask)}
@@ -384,6 +509,7 @@ const Dashboard = () => {
           onClose={() => setSharingTask(null)}
         />
       )}
+
     </div>
   );
 };
